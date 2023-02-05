@@ -8,7 +8,7 @@ public class Main {
     public Main() {
         super();
         this.deck = new Deck();
-        this.balance = 100;
+        this.balance = 500;
     }
 
     public void setBalance(int value) {
@@ -25,10 +25,11 @@ public class Main {
         Hand dealerHand = new Hand();
         System.out.println("""
                 =====================================
-                Bienvenu(e) dans le BLACK JACK
+                    Bienvenu(e) dans le BLACK JACK
                                 
-                Votre budget initial est de: $%s
-                Prêt pour le jeu? C'est parti!!!
+                    Votre budget initial est de: $%s
+                    
+                    Prêt pour le jeu? C'est parti!!!
                                 
                 =====================================
                 """.formatted(main.getBalance()));
@@ -36,11 +37,11 @@ public class Main {
         String userInput = "";
         Scanner sc = new Scanner(System.in);
         do {
-            System.out.println("""
+            System.out.print("""
                     Combien souhaitez-vous miser ?
                     Entrez une valeur entre 1 et %s
                                         
-                    *** Entrer 'Quitter(Q)' pour quitter le jeu.
+                    *** Entrez 'Quitter(Q)' pour quitter le jeu.
                     """.formatted(main.getBalance()));
             userInput = sc.nextLine();
             if (!userInput.equalsIgnoreCase("quitter") && !userInput.equalsIgnoreCase("q")) {
@@ -53,20 +54,23 @@ public class Main {
                     }
                     boolean vitoireUser = main.play(userHand, dealerHand);
                     if (vitoireUser) {
-                        System.out.println("""
-                                *******************************************
+                        System.out.print("""
+                                **********************************************
                                     Félicitations, VOUS AVEZ GAGNÉ :-) !!!
+                                **********************************************
                                 """);
                     } else {
-                        System.out.println("""
+                        System.out.print("""
                                 --------------------------------------------
                                     Désolé, VOUS AVEZ PERDU :-( !!!
+                                --------------------------------------------
                                 """);
                     }
-                    System.out.println("\t Vous: " + userHand.getValeur());
-                    userHand.cards.forEach(carte -> System.out.println("[+] " + carte.getTitre() + " de " + carte.getType() + " = " + carte.getValeur()));
-                    System.out.println("\t Dealeur: " + dealerHand.getValeur());
-                    dealerHand.cards.forEach(c -> System.out.println("[+] " + c.getTitre() + " de " + c.getType() + " = " + c.getValeur()));
+                    System.out.println("============== RECAPITULATIF ==================");
+                    System.out.println("\t Vous: " + userHand.getValeur() + " points");
+                    userHand.cards.forEach(carte -> System.out.println("[+] " + carte.getTitre() + " de " + carte.getType() + " = " + carte.getValeur() + " points"));
+                    System.out.println("\t Dealeur: " + dealerHand.getValeur() + " points");
+                    dealerHand.cards.forEach(carte -> System.out.println("[+] " + carte.getTitre() + " de " + carte.getType() + " = " + carte.getValeur() + " points"));
                     main.setBalance(vitoireUser ? main.getBalance() + valeurMise : main.getBalance() - valeurMise);
                     System.out.println();
                     System.out.println("~~~~~~~ Budget actuel: $" + main.getBalance() + " ~~~~~~~~");
@@ -105,11 +109,11 @@ public class Main {
             return true;
         } else {
             Random rand = new Random();
-            System.out.println("Vous avez actuellement en main un total de : " + userHand.getValeur());
+            System.out.println("Vous avez actuellement en main un total de : " + userHand.getValeur() + " points");
             System.out.println("Vos cartes sont :");
-            userHand.cards.forEach(carte -> System.out.println(carte.getTitre() + " de " + carte.getType() + " = " + carte.getValeur()));
+            userHand.cards.forEach(carte -> System.out.println("\t" + carte.getTitre() + " de " + carte.getType() + " = " + carte.getValeur() + " points"));
             Card oneCardFromDealerHand = dealerHand.cards.get(rand.nextInt(0, dealerHand.cards.size()));
-            System.out.println("Le dealeur possède cette carte: " + oneCardFromDealerHand.getTitre() + " de " + oneCardFromDealerHand.getType() + " = " + oneCardFromDealerHand.getValeur());
+            System.out.println("Le dealeur possède cette carte: \n\t" + oneCardFromDealerHand.getTitre() + " de " + oneCardFromDealerHand.getType() + " = " + oneCardFromDealerHand.getValeur() + " points");
             System.out.println("Prochain tour?");
             String choixUser = "";
             Scanner scanner = new Scanner(System.in);
@@ -123,7 +127,7 @@ public class Main {
             // sc.close();
             if (choixUser.equalsIgnoreCase("p")) {
                 Card newCard = this.deck.prendre();
-                System.out.println("Nouvelle carte: " + newCard.getTitre() + " de " + newCard.getType() + " = " + newCard.getValeur());
+                System.out.println("Vous avez pioché: " + newCard.getTitre() + " de " + newCard.getType() + " = " + newCard.getValeur() + " points");
                 userHand.ajouterCarte(newCard);
                 return verifierCarteEnMain(userHand, dealerHand);
             } else { // Stand
@@ -132,9 +136,9 @@ public class Main {
                         System.out.println("C'est au tour du dealeur de prendre une carte!");
                         System.out.println("...");
                         dealerHand.ajouterCarte(this.deck.prendre());
-                        System.out.println("Le dealeur a maintenant un total de " + dealerHand.getValeur());
+                        System.out.println("Le dealeur a maintenant un total de " + dealerHand.getValeur() + " points");
                         System.out.println("Ses cartes sont :");
-                        dealerHand.cards.forEach(carte -> System.out.println(carte.getTitre() + " de " + carte.getType() + " = " + carte.getValeur()));
+                        dealerHand.cards.forEach(carte -> System.out.println(carte.getTitre() + " de " + carte.getType() + " = " + carte.getValeur() + " points"));
                     } while (dealerHand.getValeur() <= 16);
                 }
                 return dealerHand.getValeur() > 21 || userHand.getValeur() > dealerHand.getValeur();
